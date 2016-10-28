@@ -30,19 +30,19 @@ int main(){
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
+		//Debugger
+		for(i = 0; i < numero_de_usuarios; i++){
+			show_list(vetor_de_usuarios[i].seguidores);
+		}
+		//Debugger
+		printf("\n");
 
 		iniciar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
+		cancelar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-		
-		//Debugger
-		printf("\n\n");
 
-		// //Debugger
-		// for(i = 0; i < numero_de_usuarios; i++){
-		// 	printf("ID: [%d]\nSeguidor: [%d]\tSeguidor: [%d]\n", vetor_de_usuarios[i].id, vetor_de_usuarios[i].seguidores->first->next->item, vetor_de_usuarios[i].seguidores->first->next->next->item);
-		// }
 
 		//Fecha o fluxo de entrada e saída de dados
 		fclose(in);

@@ -103,3 +103,17 @@ void remove_item(t_cell *cell, int item){
 		remove_item(cell->next, item);
 	}
 }
+
+void show_list(t_list *list){
+	if(list == NULL){
+		fprintf(stderr, "This List Doesn't Exist!\n");
+		exit(-1);
+	}
+
+	t_cell *aux = list->first->next;
+	while(aux != NULL){
+		printf("Item: [%d]\t->\t", aux->item);
+		aux = aux->next;
+	}
+	printf("\n");
+}

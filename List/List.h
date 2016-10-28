@@ -17,3 +17,5 @@ int is_empty(t_list *list);
 t_list *make_list();
 
 void remove_item(t_cell *cell, int item);
+
+void show_list(t_list *list);

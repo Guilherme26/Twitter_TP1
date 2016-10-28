@@ -52,3 +52,15 @@ void iniciar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 		}
 	}
 }
+
+void cancelar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario1, int id_usuario2){
+	int i;
+	for(i=0; i< numero_de_usuarios; i++){
+		if(vetor_de_usuarios[i].id == id_usuario1){
+			remove_item(vetor_de_usuarios[i].seguidores->first, id_usuario2);
+		}
+		else if(vetor_de_usuarios[i].id == id_usuario2){
+			remove_item(vetor_de_usuarios[i].seguidores->first, id_usuario1);
+		}
+	}
+}
