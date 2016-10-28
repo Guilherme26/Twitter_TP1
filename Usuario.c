@@ -64,3 +64,7 @@ void cancelar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int 
 		}
 	}
 }
+
+void ver_amigos(t_usuario usuario){
+	show_list(usuario.seguidores);
+}
