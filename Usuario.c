@@ -1,7 +1,7 @@
 #include "Usuario.h"
 
-t_usuario *aloca_usuarios(int numero_de_jogadores){
-	t_usuario *vetor_de_usuarios = (t_usuario*) calloc(numero_de_jogadores, sizeof(t_usuario));
+t_usuario *aloca_usuarios(int numero_de_usuarios){
+	t_usuario *vetor_de_usuarios = (t_usuario*) calloc(numero_de_usuarios, sizeof(t_usuario));
 	if(vetor_de_usuarios == NULL){
 		fprintf(stderr, "Allocation Error!\n");
 		exit(-1);
@@ -21,16 +21,16 @@ void inicia_jogadores(FILE *in, t_usuario *usuario){
 		exit(-1);
 	}
 
-
 	usuario->id = atoi(strtok(linha, ";"));
 	nome = strtok(NULL, ";");
+	int tam_nome = strlen(nome);
 
-	usuario->nome = (char*) calloc(1, sizeof(char));
+	usuario->nome = (char*) calloc(tam_nome, sizeof(char));
 	if(usuario->nome == NULL){
 		fscanf(stderr, "Reading Error!\n");
 		exit(-1);
 	}
-
+	strcpy(usuario->nome, nome);
 	token = strtok(NULL, ";");
 	while(token != NULL){
 		add(usuario->seguidores, atoi(token));
@@ -38,4 +38,17 @@ void inicia_jogadores(FILE *in, t_usuario *usuario){
 	}
 
 	free(linha);
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
+void iniciar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario1, int id_usuario2){
+	int i;
+	for(i=0; i< numero_de_usuarios; i++){
+		if(vetor_de_usuarios[i].id == id_usuario1){
+			add(vetor_de_usuarios[i].seguidores, id_usuario2);
+		}
+		else if(vetor_de_usuarios[i].id == id_usuario2){
+			add(vetor_de_usuarios[i].seguidores, id_usuario1);
+		}
+	}
 }

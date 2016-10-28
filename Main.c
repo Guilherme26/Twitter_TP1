@@ -13,22 +13,38 @@ int main(){
 		FILE *in = fopen(in_file_name, "r");
 		FILE *out = fopen(out_file_name, "w");
 		t_usuario *vetor_de_usuarios = NULL;
-		int numero_de_jogadores = 0, i = 0;
+		int numero_de_usuarios = 0, i = 0;
 
-		fscanf(in, "%d", &numero_de_jogadores);
+		fscanf(in, "%d", &numero_de_usuarios);
 		fseek(in, 2, SEEK_CUR);
-		vetor_de_usuarios = aloca_usuarios(numero_de_jogadores);
+		vetor_de_usuarios = aloca_usuarios(numero_de_usuarios);
 
-		for(i = 0; i < numero_de_jogadores; i++){
+		for(i = 0; i < numero_de_usuarios; i++){
 			inicia_jogadores(in, &vetor_de_usuarios[i]);
 		}
 
-		for(i = 0; i < numero_de_jogadores; i++){
+		//Debugger
+		for(i = 0; i < numero_de_usuarios; i++){
 			printf("ID: [%d]\nNome: [%s]\n", vetor_de_usuarios[i].id, vetor_de_usuarios[i].nome);
 		}
 
-		printf("%p\n", vetor_de_usuarios);
+//--------------------------------------------------------------------------------------------------------------------------------------------
 
+
+		iniciar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------
+		
+		//Debugger
+		printf("\n\n");
+
+		// //Debugger
+		// for(i = 0; i < numero_de_usuarios; i++){
+		// 	printf("ID: [%d]\nSeguidor: [%d]\tSeguidor: [%d]\n", vetor_de_usuarios[i].id, vetor_de_usuarios[i].seguidores->first->next->item, vetor_de_usuarios[i].seguidores->first->next->next->item);
+		// }
+
+		//Fecha o fluxo de entrada e saída de dados
 		fclose(in);
 		fclose(out);
 
@@ -36,7 +52,8 @@ int main(){
 		sprintf(in_file_name, "entrada0%d.txt", file_index);
 		sprintf(out_file_name, "log.entrada0%d.txt", file_index);
 
-		for(i=0; i< numero_de_jogadores; i++){
+		//Libera as memórias alocadas dinamicamente
+		for(i=0; i< numero_de_usuarios; i++){
 			delete_list(vetor_de_usuarios[i].seguidores);
 			free(vetor_de_usuarios[i].nome);
 		}
