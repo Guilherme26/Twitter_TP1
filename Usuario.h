@@ -20,3 +20,7 @@ void inicia_jogadores(FILE *in, t_usuario *usuario);
 void iniciar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario1, int id_usuario2);
 
 void ver_amigos(t_usuario usuario);
+
+//------------------------------------------------------------------------------------------------------------------------------------
+void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, char *mensagem, int instante);
+

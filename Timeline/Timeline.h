@@ -6,8 +6,8 @@
 typedef struct msg{
 	int message_id;
 	int num_likes;
-	int message[MESSAGE_SIZE];
 	int moment;
+	char message[MESSAGE_SIZE];
 	struct msg *next;
 	struct msg *previous;
 }t_msg;

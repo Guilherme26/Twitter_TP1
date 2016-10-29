@@ -41,6 +41,7 @@ void inicia_jogadores(FILE *in, t_usuario *usuario){
 	free(linha);
 }
 
+//-------------------------------------------------Funções obrigatórias---------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------
 void iniciar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario1, int id_usuario2){
 	int i;
@@ -58,10 +59,10 @@ void cancelar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int 
 	int i;
 	for(i=0; i< numero_de_usuarios; i++){
 		if(vetor_de_usuarios[i].id == id_usuario1){
-			remove_item(vetor_de_usuarios[i].seguidores->first, id_usuario2);
+			remove_seguidor(vetor_de_usuarios[i].seguidores->first, id_usuario2);
 		}
 		else if(vetor_de_usuarios[i].id == id_usuario2){
-			remove_item(vetor_de_usuarios[i].seguidores->first, id_usuario1);
+			remove_seguidor(vetor_de_usuarios[i].seguidores->first, id_usuario1);
 		}
 	}
 }
@@ -69,3 +70,49 @@ void cancelar_amizade(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int 
 void ver_amigos(t_usuario usuario){
 	show_list(usuario.seguidores);
 }
+
+//---------------------------------------------------Funções sobre mensagens----------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------
+
+void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, char *mensagem, int instante){
+	t_msg *nova_msg = (t_msg*) calloc(1, sizeof(t_msg));
+	if(nova_msg == NULL){
+		fprintf(stderr, "Allocation Error!\n");
+		exit(-1);
+	}	
+
+	nova_msg->message_id = id_mensagem;
+	strcpy(nova_msg->message, mensagem);
+	nova_msg->moment = instante;
+	nova_msg->num_likes = 0;
+
+	int i;
+	for (i=0; i < numero_de_usuarios; i++){
+		if(id_usuario == vetor_de_usuarios[i].id){
+			add_begin(vetor_de_usuarios[i].timeline, nova_msg);
+		}
+		else{
+			t_cell *seguidores = vetor_de_usuarios[i].seguidores->first;
+			while(seguidores != NULL){
+				if(seguidores->seguidor == id_usuario){
+					add_begin(vetor_de_usuarios[i].timeline, nova_msg);
+					break;
+				}
+				else{
+					seguidores = seguidores->next;
+				}
+			}
+		}
+	}
+
+}
+
+// void curtir_mensagem(){
+
+
+// }
+
+// void exibir_timeline(){
+
+
+// }

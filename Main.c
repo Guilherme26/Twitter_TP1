@@ -31,8 +31,11 @@ int main(){
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
 
+		//Debugger
 		iniciar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
 		cancelar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
+		postar_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5000, "testando timeline", 3);
+
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -50,6 +53,7 @@ int main(){
 		for(i=0; i< numero_de_usuarios; i++){
 			delete_list(vetor_de_usuarios[i].seguidores);
 			free(vetor_de_usuarios[i].nome);
+			free(vetor_de_usuarios[i].timeline);
 		}
 		free(vetor_de_usuarios);
 

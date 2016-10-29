@@ -1,9 +1,9 @@
 #include "List.h"
 
 /*
-	This method receives an item and add on the list
+	This method receives an seguidor and add on the list
 */
-void add(t_list *list, int item){
+void add(t_list *list, int seguidor){
 	if(list == NULL){
 		fprintf(stderr, "This List Doesn't Exist!\n");
 		exit(-1);
@@ -15,7 +15,7 @@ void add(t_list *list, int item){
 		exit(-1);
 	}
 
-	cell->item = item;
+	cell->seguidor = seguidor;
 	cell->next = NULL;
 
 	list->last->next = cell;
@@ -83,22 +83,22 @@ t_list *make_list(){
 }
 
 /*
-	This method removes the given item of the list
+	This method removes the given seguidor of the list
 */
-void remove_item(t_cell *cell, int item){
+void remove_seguidor(t_cell *cell, int seguidor){
 	if(cell == NULL){
 		fprintf(stderr, "This List Doesn't Exist!\n");
 		exit(-1);
 	}
 
-	if(cell->next->item == item){
+	if(cell->next->seguidor == seguidor){
 		t_cell *aux = cell->next;
 		cell->next = cell->next->next;
 		
 		free(aux);
 	}
 	else{
-		remove_item(cell->next, item);
+		remove_seguidor(cell->next, seguidor);
 	}
 }
 
@@ -110,7 +110,7 @@ void show_list(t_list *list){
 
 	t_cell *aux = list->first->next;
 	while(aux != NULL){
-		printf("Item: [%d]\t->\t", aux->item);
+		printf("seguidor: [%d]\t->\t", aux->seguidor);
 		aux = aux->next;
 	}
 	printf("\n");
