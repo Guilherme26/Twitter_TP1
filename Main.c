@@ -23,19 +23,13 @@ int main(){
 			inicia_jogadores(in, &vetor_de_usuarios[i]);
 		}
 
-		//Debugger
-		for(i = 0; i < numero_de_usuarios; i++){
-			printf("ID: [%d]\nNome: [%s]\n", vetor_de_usuarios[i].id, vetor_de_usuarios[i].nome);
-		}
+		// //Debugger
+		// for(i = 0; i < numero_de_usuarios; i++){
+		// 	printf("ID: [%d]\nNome: [%s]\n", vetor_de_usuarios[i].id, vetor_de_usuarios[i].nome);
+		// }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
-		//Debugger
-		for(i = 0; i < numero_de_usuarios; i++){
-			show_list(vetor_de_usuarios[i].seguidores);
-		}
-		//Debugger
-		printf("\n");
 
 		iniciar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
 		cancelar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);

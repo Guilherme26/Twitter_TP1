@@ -23,9 +23,9 @@ void inicia_jogadores(FILE *in, t_usuario *usuario){
 
 	usuario->id = atoi(strtok(linha, ";"));
 	nome = strtok(NULL, ";");
-	int tam_nome = strlen(nome);
 
-	usuario->nome = (char*) calloc(tam_nome, sizeof(char));
+	int tam_nome = strlen(nome);
+	usuario->nome = (char*) calloc(tam_nome+1, sizeof(char));
 	if(usuario->nome == NULL){
 		fscanf(stderr, "Reading Error!\n");
 		exit(-1);
