@@ -15,6 +15,7 @@ void inicia_jogadores(FILE *in, t_usuario *usuario){
 	char *nome = NULL;
 	
 	usuario->seguidores = make_list();
+	usuario->timeline = make_timeline();
 	fgets(linha, BUFFER, in);
 	if(linha == NULL){
 		fscanf(stderr, "Reading Error!\n");

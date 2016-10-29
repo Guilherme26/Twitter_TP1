@@ -3,33 +3,36 @@
 
 #define MESSAGE_SIZE 140
 
-typedef struct cell{
+typedef struct msg{
 	int message_id;
 	int num_likes;
 	int message[MESSAGE_SIZE];
 	int moment;
-	struct cell *next;
-	struct cell *previous;
-}t_cell;
+	struct msg *next;
+	struct msg *previous;
+}t_msg;
 
 typedef struct{
-	t_cell *first;
-	t_cell *last;
+	t_msg *first;
+	t_msg *last;
 	int list_size;
-}t_list;
+}t_timeline;
 
-void add_begin(t_list *list, t_cell *new_cell);
 
-void add_end(t_list *list, t_cell *new_cell);
+void add_begin(t_timeline *list, t_msg *new_cell);
 
-void delete_list(t_list *list);
+void add_end(t_timeline *list, t_msg *new_cell);
 
-int is_empty(t_list *list);
+void delete_timeline(t_timeline *list);
 
-t_list *make_list();
+int is_empty_timeline(t_timeline *list);
 
-t_cell* remove_item(t_list *list, int item);
+t_timeline *make_timeline();
 
-void set_first(t_list *list, int message_id);
+void remove_msg(t_timeline *list, int item);
 
-void show_list(t_list *list);
+t_msg* get_item(t_timeline *list, int item);
+
+void set_first(t_timeline *list, int message_id);
+
+void show_timeline(t_timeline *list);
