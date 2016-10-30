@@ -45,12 +45,20 @@ int main(){
 		// show_timeline(vetor_de_usuarios[1].timeline);
 		// show_timeline(vetor_de_usuarios[2].timeline);
 		// show_timeline(vetor_de_usuarios[3].timeline);
-		curtir_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5000);
+		curtir_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5000, 4);
+		
+		exibir_timeline(out, vetor_de_usuarios[1]);
 
-		show_timeline(vetor_de_usuarios[0].timeline);
-		show_timeline(vetor_de_usuarios[1].timeline);
-		show_timeline(vetor_de_usuarios[2].timeline);
-		show_timeline(vetor_de_usuarios[3].timeline);	
+		curtir_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5001, 5);
+
+		exibir_timeline(out, vetor_de_usuarios[1]);
+
+		// show_timeline(vetor_de_usuarios[0].timeline);
+		// show_timeline(vetor_de_usuarios[1].timeline);
+		// show_timeline(vetor_de_usuarios[2].timeline);
+		// show_timeline(vetor_de_usuarios[3].timeline);	
+
+
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
 

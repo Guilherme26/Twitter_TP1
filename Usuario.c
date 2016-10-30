@@ -108,27 +108,22 @@ void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 
 }
 
-void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem){
+void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, int instante){
 
 	int i;
 	for(i=0; i < numero_de_usuarios; i++){
 		if(vetor_de_usuarios[i].id == id_usuario){
-			show_timeline(vetor_de_usuarios[i].timeline);
 			set_first(vetor_de_usuarios[i].timeline, id_mensagem);
 			vetor_de_usuarios[i].timeline->first->msg->num_likes++;
-			printf("Index: [%d]\n", i);
 			
+			vetor_de_usuarios[i].timeline->first->msg->moment = instante;
 		}
 		else{
-			printf("Index: [%d]\n", i);
 			t_cell *seguidores = vetor_de_usuarios[i].seguidores->first;
 
 			while(seguidores != NULL){
 				if(seguidores->seguidor == id_usuario){
-
-					show_timeline(vetor_de_usuarios[i].timeline);
 					set_first(vetor_de_usuarios[i].timeline, id_mensagem);
-					vetor_de_usuarios[i].timeline->first->msg->num_likes++;
 					break;
 				}
 				else{
@@ -140,7 +135,12 @@ void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 
 }
 
-// void exibir_timeline(){
+void exibir_timeline(FILE *out, t_usuario usuario){
+	fprintf(out, "%d %s\n", usuario.id, usuario.nome);
 
-
-// }
+	t_nodo *w_nodo = usuario.timeline->first;
+	while(w_nodo != NULL){
+		fprintf(out, "%d %s %d\n", w_nodo->msg->message_id, w_nodo->msg->message, w_nodo->msg->num_likes);
+		w_nodo = w_nodo->next;
+	}
+}
