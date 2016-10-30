@@ -27,3 +27,5 @@ void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, int instante);
 
 void exibir_timeline(FILE *out, t_usuario usuario);
+
+void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuarios);

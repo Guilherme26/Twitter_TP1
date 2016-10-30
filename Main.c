@@ -23,42 +23,8 @@ int main(){
 			inicia_jogadores(in, &vetor_de_usuarios[i]);
 		}
 
-		// //Debugger
-		// for(i = 0; i < numero_de_usuarios; i++){
-		// 	printf("ID: [%d]\nNome: [%s]\n", vetor_de_usuarios[i].id, vetor_de_usuarios[i].nome);
-		// }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------
-
-
-		//Debugger
-		iniciar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
-		cancelar_amizade(vetor_de_usuarios, numero_de_usuarios, 300, 400);
-		postar_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5000, "testando timeline", 3);
-		postar_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5001, "Segunda Mensagem", 3);
-		postar_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5002, "Terceira Mensagem", 3);
-
-
-		printf("\n\n");
-
-		// show_timeline(vetor_de_usuarios[0].timeline);
-		// show_timeline(vetor_de_usuarios[1].timeline);
-		// show_timeline(vetor_de_usuarios[2].timeline);
-		// show_timeline(vetor_de_usuarios[3].timeline);
-		curtir_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5000, 4);
-		
-		exibir_timeline(out, vetor_de_usuarios[1]);
-
-		curtir_mensagem(vetor_de_usuarios, numero_de_usuarios, 100, 5001, 5);
-
-		exibir_timeline(out, vetor_de_usuarios[1]);
-
-		// show_timeline(vetor_de_usuarios[0].timeline);
-		// show_timeline(vetor_de_usuarios[1].timeline);
-		// show_timeline(vetor_de_usuarios[2].timeline);
-		// show_timeline(vetor_de_usuarios[3].timeline);	
-
-
+		exe(in, out, vetor_de_usuarios, numero_de_usuarios);
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
 

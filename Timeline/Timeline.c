@@ -13,10 +13,6 @@ void add_begin(t_timeline *list, t_msg *nova_msg){
 		list->first = novo_nodo;
 		list->last = novo_nodo;
 		list->list_size++;
-		
-		//Debugger
-		printf("ADD_BEGIN = EMPTY\nEndereço: [%p]\t Id: [%d]\n", novo_nodo, novo_nodo->msg->message_id);
-
 	}
 	else{
 		novo_nodo->previous = NULL;   
@@ -24,10 +20,6 @@ void add_begin(t_timeline *list, t_msg *nova_msg){
 		list->first->previous = novo_nodo;   
 		list->first = novo_nodo;
 		list->list_size++;
-
-		//Debugger
-		printf("ADD_BEGIN = FILLED\nEndereço: [%p]\t Id: [%d]\n", novo_nodo, novo_nodo->msg->message_id);
-
 	}
 }
 
@@ -166,9 +158,6 @@ t_msg* get_item(t_timeline *list, int item){
 				list->first = w_nodo->next;
 				w_nodo->next->previous = NULL;
 
-				//Debugger
-				printf("GET_ITEM = FIRST\nEndereço: [%p]\t Id: [%d]\n", w_nodo, w_nodo->msg->message_id);
-
 				t_msg *tmp = w_nodo->msg;
 				free(w_nodo);
 				return tmp;
@@ -177,9 +166,6 @@ t_msg* get_item(t_timeline *list, int item){
 				list->last = w_nodo->previous;
 				w_nodo->previous->next = NULL;
 
-				//Debugger
-				printf("GET_ITEM = LAST\nEndereço: [%p]\t Id: [%d]\n", w_nodo, w_nodo->msg->message_id);
-				
 				t_msg *tmp = w_nodo->msg;
 				free(w_nodo);
 				return tmp;
@@ -190,9 +176,6 @@ t_msg* get_item(t_timeline *list, int item){
 				
 				w_nodo->next = NULL;
 				w_nodo->previous = NULL;
-
-				//Debbuger
-				printf("GET_ITEM = MIDDLE\nEndereço: [%p]\t Id: [%d]\n", w_nodo, w_nodo->msg->message_id);
 
 				t_msg *tmp = w_nodo->msg;
 				free(w_nodo);
@@ -211,10 +194,10 @@ void set_first(t_timeline *list, int message_id){
 		exit(-1);
 	}
 
-
 	t_msg *aux = get_item(list, message_id);
-	//Debugger
-	printf("SET_FIRST\nEndereço: [%p]\t Id: [%d]\n", aux, aux->message_id);
+
+	// //Debugger
+	// printf("AUX: [%p] ITEM: [%d]\n", aux, aux->message_id);
 
 	if(aux != NULL)
 		add_begin(list, aux);

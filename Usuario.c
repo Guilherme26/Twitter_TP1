@@ -140,7 +140,79 @@ void exibir_timeline(FILE *out, t_usuario usuario){
 
 	t_nodo *w_nodo = usuario.timeline->first;
 	while(w_nodo != NULL){
-		fprintf(out, "%d %s %d\n", w_nodo->msg->message_id, w_nodo->msg->message, w_nodo->msg->num_likes);
+		fprintf(out, "%d %d %s", w_nodo->msg->message_id, w_nodo->msg->num_likes, w_nodo->msg->message);
 		w_nodo = w_nodo->next;
+	}
+}
+
+void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuarios){
+	char linha[BUFFER];
+
+	while( fgets(linha, BUFFER, in) ){
+		int instante = -1, acao_usuario = -1;
+			
+		instante = atoi(strtok(linha, ";"));
+		acao_usuario = atoi(strtok(NULL, ";"));
+
+		switch(acao_usuario){
+			case 1:{
+				int id_usuario = -1, id_mensagem = -1;
+				char mensagem[MESSAGE_SIZE];
+
+				id_usuario = atoi(strtok(NULL, ";"));
+				id_mensagem = atoi(strtok(NULL, ";"));
+				strcpy(mensagem, strtok(NULL, ";"));
+
+				postar_mensagem(vetor_de_usuarios, numero_de_usuarios, id_usuario, id_mensagem, mensagem, instante);
+
+				break;
+			}
+			case 2:{
+				int id_usuario1 = -1, id_usuario2 = -1;
+
+				id_usuario1 = atoi(strtok(NULL, ";"));
+				id_usuario2 = atoi(strtok(NULL, ";"));
+
+				iniciar_amizade(vetor_de_usuarios, numero_de_usuarios, id_usuario1, id_usuario2);
+
+				break;
+			}
+			case 3:{
+				int id_usuario1 = -1, id_usuario2 = -1;
+
+				id_usuario1 = atoi(strtok(NULL, ";"));
+				id_usuario2 = atoi(strtok(NULL, ";"));
+
+				cancelar_amizade(vetor_de_usuarios, numero_de_usuarios, id_usuario1, id_usuario2);
+
+				break;
+			}
+			case 4:{
+				int id_usuario = -1, id_mensagem = -1;
+
+				id_usuario = atoi(strtok(NULL, ";"));
+				id_mensagem = atoi(strtok(NULL, ";"));
+
+				curtir_mensagem(vetor_de_usuarios, numero_de_usuarios, id_usuario, id_mensagem, instante);
+
+				break;
+			}
+			case 5:{
+				int id_usuario = -1;
+			
+				id_usuario = atoi(strtok(NULL, ";"));
+
+				int i;
+				for(i = 0; i < numero_de_usuarios; i++){
+					if(vetor_de_usuarios[i].id == id_usuario){
+						exibir_timeline(out, vetor_de_usuarios[i]);
+						break;
+					}
+				}
+
+
+				break;
+			}
+		}
 	}
 }
