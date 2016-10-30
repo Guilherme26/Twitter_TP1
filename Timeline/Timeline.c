@@ -3,36 +3,50 @@
 /*
 	This method receives an item and add on the list
 */
-void add_begin(t_timeline *list, t_msg *new_cell){
-	if(!is_empty_timeline(list)){
-		new_cell->previous = NULL;   
-		new_cell->next = list->first;   
-		list->first->previous = new_cell;   
-		list->first = new_cell;
+void add_begin(t_timeline *list, t_msg *nova_msg){
+	t_nodo *novo_nodo = (t_nodo*) calloc(1, sizeof(t_nodo));
+	novo_nodo->msg = nova_msg;
+
+	if(is_empty_timeline(list)){
+		novo_nodo->previous = NULL;
+		novo_nodo->next = NULL;
+		list->first = novo_nodo;
+		list->last = novo_nodo;
 		list->list_size++;
+		
+		//Debugger
+		printf("ADD_BEGIN = EMPTY\nEndereço: [%p]\t Id: [%d]\n", novo_nodo, novo_nodo->msg->message_id);
+
 	}
 	else{
-		new_cell->previous = NULL;   
-		new_cell->next = NULL; 
-		list->first = new_cell;
-		list->last = new_cell;
+		novo_nodo->previous = NULL;   
+		novo_nodo->next = list->first;   
+		list->first->previous = novo_nodo;   
+		list->first = novo_nodo;
 		list->list_size++;
+
+		//Debugger
+		printf("ADD_BEGIN = FILLED\nEndereço: [%p]\t Id: [%d]\n", novo_nodo, novo_nodo->msg->message_id);
+
 	}
 }
 
-void add_end(t_timeline *list, t_msg *new_cell){
-	if(!is_empty_timeline(list)){
-		new_cell->previous = list->last;   
-		new_cell->next = NULL;   
-		list->last->next = new_cell;
-		list->last = new_cell;
+void add_end(t_timeline *list, t_msg *nova_msg){
+	t_nodo *novo_nodo = (t_nodo*) calloc(1, sizeof(t_nodo));
+	novo_nodo->msg = nova_msg;
+
+	if(is_empty_timeline(list)){
+		novo_nodo->next = NULL;   
+		novo_nodo->previous = NULL;
+		list->first = novo_nodo;
+		list->last = novo_nodo;
 		list->list_size++;
 	}
 	else{
-		new_cell->next = NULL;   
-		new_cell->previous = NULL;
-		list->first = new_cell;
-		list->last = new_cell;
+		novo_nodo->previous = list->last;   
+		novo_nodo->next = NULL;   
+		list->last->next = novo_nodo;
+		list->last = novo_nodo;
 		list->list_size++;
 	}
 }
@@ -47,7 +61,8 @@ void delete_timeline(t_timeline *list){
 	}
 
 	if(list->first != NULL){
-		t_msg *aux = list->first->next;
+		t_nodo *aux = list->first->next;
+
 		free(list->first);
 		list->first = aux;
 
@@ -101,38 +116,38 @@ void remove_msg(t_timeline *list, int item){
 	}
 
 	//Walking cell
-	t_msg *w_cell = list->first;
-	while(w_cell != NULL){
-		if(w_cell->message_id == item){
-			if(w_cell == list->first){
-				list->first = w_cell->next;
+	t_nodo *w_nodo = list->first;
+	while(w_nodo != NULL){
+		if(w_nodo->msg->message_id == item){
+			if(w_nodo == list->first){
+				list->first = w_nodo->next;
 				list->first->previous = NULL;
 
 				list->list_size--;
-				free(w_cell);
+				free(w_nodo);
 				return;
 			}
-			else if(w_cell == list->last){
-				list->last = w_cell->previous;
+			else if(w_nodo == list->last){
+				list->last = w_nodo->previous;
 				list->last->next = NULL;
 
 				list->list_size--;
-				free(w_cell);
+				free(w_nodo);
 				return;			}
 			else{
-				w_cell->previous->next = w_cell->next;
-				w_cell->next->previous = w_cell->previous;
+				w_nodo->previous->next = w_nodo->next;
+				w_nodo->next->previous = w_nodo->previous;
 				
-				w_cell->next = NULL;
-				w_cell->previous = NULL;
+				w_nodo->next = NULL;
+				w_nodo->previous = NULL;
 
 				list->list_size--;
-				free(w_cell);
+				free(w_nodo);
 				return;
 			}
 		}
 		else{
-			w_cell = w_cell->next;
+			w_nodo = w_nodo->next;
 		}
 	}
 }
@@ -144,36 +159,48 @@ t_msg* get_item(t_timeline *list, int item){
 	}
 
 	//Walking cell
-	t_msg *w_cell = list->first;
-	while(w_cell != NULL){
-		if(w_cell->message_id == item){
-			if(w_cell == list->first){
-				list->first = w_cell->next;
-				list->first->previous = NULL;
+	t_nodo *w_nodo = list->first;
+	while(w_nodo != NULL){
+		if(w_nodo->msg->message_id == item){
+			if(w_nodo == list->first){
+				list->first = w_nodo->next;
+				w_nodo->next->previous = NULL;
 
-				list->list_size--;
-				return w_cell;
+				//Debugger
+				printf("GET_ITEM = FIRST\nEndereço: [%p]\t Id: [%d]\n", w_nodo, w_nodo->msg->message_id);
+
+				t_msg *tmp = w_nodo->msg;
+				free(w_nodo);
+				return tmp;
 			}
-			else if(w_cell == list->last){
-				list->last = w_cell->previous;
-				list->last->next = NULL;
+			else if(w_nodo == list->last){
+				list->last = w_nodo->previous;
+				w_nodo->previous->next = NULL;
 
-				list->list_size--;
-				return w_cell;
+				//Debugger
+				printf("GET_ITEM = LAST\nEndereço: [%p]\t Id: [%d]\n", w_nodo, w_nodo->msg->message_id);
+				
+				t_msg *tmp = w_nodo->msg;
+				free(w_nodo);
+				return tmp;
 			}
 			else{
-				w_cell->previous->next = w_cell->next;
-				w_cell->next->previous = w_cell->previous;
+				w_nodo->previous->next = w_nodo->next;
+				w_nodo->next->previous = w_nodo->previous;
 				
-				w_cell->next = NULL;
-				w_cell->previous = NULL;
+				w_nodo->next = NULL;
+				w_nodo->previous = NULL;
 
-				list->list_size--;
-				return w_cell;
+				//Debbuger
+				printf("GET_ITEM = MIDDLE\nEndereço: [%p]\t Id: [%d]\n", w_nodo, w_nodo->msg->message_id);
+
+				t_msg *tmp = w_nodo->msg;
+				free(w_nodo);
+				return tmp;
 			}
 		}
 		else{
-			w_cell = w_cell->next;
+			w_nodo = w_nodo->next;
 		}
 	}
 }
@@ -184,8 +211,13 @@ void set_first(t_timeline *list, int message_id){
 		exit(-1);
 	}
 
+
 	t_msg *aux = get_item(list, message_id);
-	add_begin(list, aux);
+	//Debugger
+	printf("SET_FIRST\nEndereço: [%p]\t Id: [%d]\n", aux, aux->message_id);
+
+	if(aux != NULL)
+		add_begin(list, aux);
 
 }
 
@@ -195,9 +227,9 @@ void show_timeline(t_timeline *list){
 		exit(-1);
 	}
 
-	t_msg *aux = list->first;
+	t_nodo *aux = list->first;
 	while(aux != NULL){
-		printf("Item: [%d]->\t", aux->message_id);
+		printf("Item: [%d]->\t", aux->msg->message_id);
 		aux = aux->next;
 	}
 	printf("\n");

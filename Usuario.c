@@ -92,10 +92,43 @@ void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 			add_begin(vetor_de_usuarios[i].timeline, nova_msg);
 		}
 		else{
+			//Walking Followers
+			t_cell *w_seguidores = vetor_de_usuarios[i].seguidores->first;
+			while(w_seguidores != NULL){
+				if(w_seguidores->seguidor == id_usuario){
+					add_begin(vetor_de_usuarios[i].timeline, nova_msg);
+					break;
+				}
+				else{
+					w_seguidores = w_seguidores->next;
+				}
+			}
+		}
+	}
+
+}
+
+void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem){
+
+	int i;
+	for(i=0; i < numero_de_usuarios; i++){
+		if(vetor_de_usuarios[i].id == id_usuario){
+			show_timeline(vetor_de_usuarios[i].timeline);
+			set_first(vetor_de_usuarios[i].timeline, id_mensagem);
+			vetor_de_usuarios[i].timeline->first->msg->num_likes++;
+			printf("Index: [%d]\n", i);
+			
+		}
+		else{
+			printf("Index: [%d]\n", i);
 			t_cell *seguidores = vetor_de_usuarios[i].seguidores->first;
+
 			while(seguidores != NULL){
 				if(seguidores->seguidor == id_usuario){
-					add_begin(vetor_de_usuarios[i].timeline, nova_msg);
+
+					show_timeline(vetor_de_usuarios[i].timeline);
+					set_first(vetor_de_usuarios[i].timeline, id_mensagem);
+					vetor_de_usuarios[i].timeline->first->msg->num_likes++;
 					break;
 				}
 				else{
@@ -106,11 +139,6 @@ void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 	}
 
 }
-
-// void curtir_mensagem(){
-
-
-// }
 
 // void exibir_timeline(){
 

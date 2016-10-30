@@ -24,3 +24,4 @@ void ver_amigos(t_usuario usuario);
 //------------------------------------------------------------------------------------------------------------------------------------
 void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, char *mensagem, int instante);
 
+void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem);

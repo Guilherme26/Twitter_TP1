@@ -3,18 +3,23 @@
 
 #define MESSAGE_SIZE 140
 
-typedef struct msg{
+
+typedef struct{
 	int message_id;
 	int num_likes;
 	int moment;
 	char message[MESSAGE_SIZE];
-	struct msg *next;
-	struct msg *previous;
 }t_msg;
 
+typedef struct nodo{
+	struct nodo *previous;
+	t_msg *msg;
+	struct nodo *next;
+}t_nodo;
+
 typedef struct{
-	t_msg *first;
-	t_msg *last;
+	t_nodo *first;
+	t_nodo *last;
 	int list_size;
 }t_timeline;
 
