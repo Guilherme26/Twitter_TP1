@@ -119,15 +119,16 @@ void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 			vetor_de_usuarios[i].timeline->first->msg->moment = instante;
 		}
 		else{
-			t_cell *seguidores = vetor_de_usuarios[i].seguidores->first;
+			t_nodo *post = vetor_de_usuarios[i].timeline->first;
 
-			while(seguidores != NULL){
-				if(seguidores->seguidor == id_usuario){
+			while(post != NULL){
+				if(post->msg->message_id == id_mensagem){
 					set_first(vetor_de_usuarios[i].timeline, id_mensagem);
+
 					break;
 				}
 				else{
-					seguidores = seguidores->next;
+					post = post->next;
 				}
 			}
 		}
