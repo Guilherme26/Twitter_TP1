@@ -8,12 +8,14 @@ typedef struct{
 	int message_id;
 	int num_likes;
 	int moment;
+	int owner;
 	char message[MESSAGE_SIZE];
 }t_msg;
 
 typedef struct nodo{
 	struct nodo *previous;
 	t_msg *msg;
+	int saw;
 	struct nodo *next;
 }t_nodo;
 

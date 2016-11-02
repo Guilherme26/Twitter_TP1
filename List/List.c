@@ -1,8 +1,6 @@
 #include "List.h"
 
-/*
-	This method receives an seguidor and add on the list
-*/
+//Este método faz com que um novo seguidor seja adicionado ao fim de uma lista encadeada
 void add(t_list *list, int seguidor){
 	if(list == NULL){
 		fprintf(stderr, "This List Doesn't Exist!\n");
@@ -22,9 +20,7 @@ void add(t_list *list, int seguidor){
 	list->last = cell;
 }
 
-/*
-	This method deletes all list and it's members. This method must be used on the end of program to avoid memory leak
-*/
+//Este método realiza a desalocação de toda memória dinamicamente alocada para a lista
 void delete_list(t_list *list){
 	if(list == NULL){
 		fprintf(stderr, "This List Doesn't Exist!\n");
@@ -43,9 +39,7 @@ void delete_list(t_list *list){
 	}
 }
 
-/*
-	This function checks if the list is empty, then returns 1 if yes and 0 if not
-*/
+//Esta função confere se uma lista encadeada está vazia e retorna 1(SIM) ou 0(NÃO);
 int is_empty(t_list *list){
 	if(list == NULL){
 		fprintf(stderr, "This List Doesn't Exist!\n");
@@ -58,20 +52,19 @@ int is_empty(t_list *list){
 		return 0;
 }
 
-/*
-	This function create a dynamic empty list and returns the address of it
-*/
+/*Essa função aloca dinamicamente uma lista encadeada e retorna o endereço na memória que foi alocado, a primeira célula
+é reservada para a célula cabeça deste contexto*/
 t_list *make_list(){
 	t_list *list = (t_list*) calloc(1, sizeof(t_list));
 	t_cell *cell = (t_cell*) calloc(1, sizeof(t_cell));
-	
+
 	if(cell == NULL){
 		fprintf(stderr, "Alocation Error!\n");
 		exit(-1);
 	}
 	if(list == NULL){
 		fprintf(stderr, "Alocation Error!\n");
-		exit(-1);	
+		exit(-1);
 	}
 
 	cell->next = NULL;
@@ -82,9 +75,7 @@ t_list *make_list(){
 	return list;
 }
 
-/*
-	This method removes the given seguidor of the list
-*/
+//Dado um certo ID, o método remove um seguidor de determinada lista
 void remove_seguidor(t_cell *cell, int seguidor){
 	if(cell == NULL){
 		fprintf(stderr, "This List Doesn't Exist!\n");
@@ -94,7 +85,7 @@ void remove_seguidor(t_cell *cell, int seguidor){
 	if(cell->next->seguidor == seguidor){
 		t_cell *aux = cell->next;
 		cell->next = cell->next->next;
-		
+
 		free(aux);
 	}
 	else{
@@ -102,6 +93,7 @@ void remove_seguidor(t_cell *cell, int seguidor){
 	}
 }
 
+//Mostra quais são os membros integrantes da lista encadeada
 void show_list(t_list *list){
 	if(list == NULL){
 		fprintf(stderr, "This List Doesn't Exist!\n");

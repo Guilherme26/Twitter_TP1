@@ -9,11 +9,11 @@ t_usuario *aloca_usuarios(int numero_de_usuarios){
 	return vetor_de_usuarios;
 }
 
-void inicia_jogadores(FILE *in, t_usuario *usuario){
+void inicia_usuarios(FILE *in, t_usuario *usuario){
 	char *token = NULL;
 	char *linha = (char*) calloc(BUFFER, sizeof(char));
 	char *nome = NULL;
-	
+
 	usuario->seguidores = make_list();
 	usuario->timeline = make_timeline();
 	fgets(linha, BUFFER, in);
@@ -31,7 +31,9 @@ void inicia_jogadores(FILE *in, t_usuario *usuario){
 		fscanf(stderr, "Reading Error!\n");
 		exit(-1);
 	}
+
 	strcpy(usuario->nome, nome);
+
 	token = strtok(NULL, ";");
 	while(token != NULL){
 		add(usuario->seguidores, atoi(token));
@@ -74,49 +76,52 @@ void ver_amigos(t_usuario usuario){
 //---------------------------------------------------Funções sobre mensagens----------------------------------------------------------
 //-------------------------------------------------------------------------------------------------------------------------------------
 
-void postar_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, char *mensagem, int instante){
-	t_msg *nova_msg = (t_msg*) calloc(1, sizeof(t_msg));
+void postar_mensagem(t_timeline *principal, t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, char *mensagem, int instante){
+	t_msg *nova_msg = (t_msg*) calloc(1, sizeof(t_msg)+1);
 	if(nova_msg == NULL){
 		fprintf(stderr, "Allocation Error!\n");
 		exit(-1);
-	}	
+	}
 
 	nova_msg->message_id = id_mensagem;
+
 	strcpy(nova_msg->message, mensagem);
+
+	int size = strlen(nova_msg->message);
+	nova_msg->message[size-2] = 0; //Retira o caractere '\n' da string
 	nova_msg->moment = instante;
+	nova_msg->owner = id_usuario;
 	nova_msg->num_likes = 0;
 
 	int i;
 	for (i=0; i < numero_de_usuarios; i++){
 		if(id_usuario == vetor_de_usuarios[i].id){
 			add_begin(vetor_de_usuarios[i].timeline, nova_msg);
-		}
-		else{
-			//Walking Followers
-			t_cell *w_seguidores = vetor_de_usuarios[i].seguidores->first;
+            //Este Nó caminha ao longo da lista de seguidores
+			t_cell *w_seguidores = vetor_de_usuarios[i].seguidores->first->next;
 			while(w_seguidores != NULL){
-				if(w_seguidores->seguidor == id_usuario){
-					add_begin(vetor_de_usuarios[i].timeline, nova_msg);
-					break;
-				}
-				else{
-					w_seguidores = w_seguidores->next;
-				}
-			}
+                int j;
+                for(j=0; j<numero_de_usuarios; j++){
+                        if(vetor_de_usuarios[j].id == w_seguidores->seguidor){
+                            add_begin(vetor_de_usuarios[j].timeline, nova_msg);
+                        }
+                }
+                w_seguidores = w_seguidores->next;
+            }
 		}
 	}
-
+	add_begin(principal, nova_msg);
 }
 
-void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, int instante){
-
+void curtir_mensagem(t_timeline *principal, t_usuario *vetor_de_usuarios, int numero_de_usuarios, int id_usuario, int id_mensagem, int instante){
 	int i;
+
 	for(i=0; i < numero_de_usuarios; i++){
 		if(vetor_de_usuarios[i].id == id_usuario){
 			set_first(vetor_de_usuarios[i].timeline, id_mensagem);
 			vetor_de_usuarios[i].timeline->first->msg->num_likes++;
-			
 			vetor_de_usuarios[i].timeline->first->msg->moment = instante;
+			vetor_de_usuarios[i].timeline->first->saw = 0;
 		}
 		else{
 			t_nodo *post = vetor_de_usuarios[i].timeline->first;
@@ -124,7 +129,6 @@ void curtir_mensagem(t_usuario *vetor_de_usuarios, int numero_de_usuarios, int i
 			while(post != NULL){
 				if(post->msg->message_id == id_mensagem){
 					set_first(vetor_de_usuarios[i].timeline, id_mensagem);
-
 					break;
 				}
 				else{
@@ -141,20 +145,22 @@ void exibir_timeline(FILE *out, t_usuario usuario){
 
 	t_nodo *w_nodo = usuario.timeline->first;
 	while(w_nodo != NULL){
-		fprintf(out, "%d %d %s", w_nodo->msg->message_id, w_nodo->msg->num_likes, w_nodo->msg->message);
-		w_nodo = w_nodo->next;
+        if(w_nodo->saw == 0){
+            fprintf(out, "%d %s %d\n", w_nodo->msg->message_id, w_nodo->msg->message, w_nodo->msg->num_likes);
+            w_nodo->saw = 1;
+        }
+        w_nodo = w_nodo->next;
 	}
 }
 
-void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuarios){
+void exe(FILE *in, FILE *out, t_timeline *principal, t_usuario *vetor_de_usuarios, int numero_de_usuarios){
 	char linha[BUFFER];
 
 	while( fgets(linha, BUFFER, in) ){
 		int instante = -1, acao_usuario = -1;
-			
+
 		instante = atoi(strtok(linha, ";"));
 		acao_usuario = atoi(strtok(NULL, ";"));
-
 		switch(acao_usuario){
 			case 1:{
 				int id_usuario = -1, id_mensagem = -1;
@@ -163,9 +169,7 @@ void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuari
 				id_usuario = atoi(strtok(NULL, ";"));
 				id_mensagem = atoi(strtok(NULL, ";"));
 				strcpy(mensagem, strtok(NULL, ";"));
-
-				postar_mensagem(vetor_de_usuarios, numero_de_usuarios, id_usuario, id_mensagem, mensagem, instante);
-
+				postar_mensagem(principal, vetor_de_usuarios, numero_de_usuarios, id_usuario, id_mensagem, mensagem, instante);
 				break;
 			}
 			case 2:{
@@ -173,9 +177,7 @@ void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuari
 
 				id_usuario1 = atoi(strtok(NULL, ";"));
 				id_usuario2 = atoi(strtok(NULL, ";"));
-
 				iniciar_amizade(vetor_de_usuarios, numero_de_usuarios, id_usuario1, id_usuario2);
-
 				break;
 			}
 			case 3:{
@@ -183,9 +185,7 @@ void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuari
 
 				id_usuario1 = atoi(strtok(NULL, ";"));
 				id_usuario2 = atoi(strtok(NULL, ";"));
-
 				cancelar_amizade(vetor_de_usuarios, numero_de_usuarios, id_usuario1, id_usuario2);
-
 				break;
 			}
 			case 4:{
@@ -193,16 +193,12 @@ void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuari
 
 				id_usuario = atoi(strtok(NULL, ";"));
 				id_mensagem = atoi(strtok(NULL, ";"));
-
-				curtir_mensagem(vetor_de_usuarios, numero_de_usuarios, id_usuario, id_mensagem, instante);
-
+				curtir_mensagem(principal, vetor_de_usuarios, numero_de_usuarios, id_usuario, id_mensagem, instante);
 				break;
 			}
 			case 5:{
 				int id_usuario = -1;
-			
 				id_usuario = atoi(strtok(NULL, ";"));
-
 				int i;
 				for(i = 0; i < numero_de_usuarios; i++){
 					if(vetor_de_usuarios[i].id == id_usuario){
@@ -210,7 +206,6 @@ void exe(FILE *in, FILE *out, t_usuario *vetor_de_usuarios, int numero_de_usuari
 						break;
 					}
 				}
-
 
 				break;
 			}

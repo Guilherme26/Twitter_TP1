@@ -14,18 +14,18 @@ int main(){
 		FILE *out = fopen(out_file_name, "w");
 		t_usuario *vetor_de_usuarios = NULL;
 		int numero_de_usuarios = 0, i = 0;
+		t_timeline *principal = make_timeline();
 
 		fscanf(in, "%d", &numero_de_usuarios);
 		fseek(in, 2, SEEK_CUR);
 		vetor_de_usuarios = aloca_usuarios(numero_de_usuarios);
 
 		for(i = 0; i < numero_de_usuarios; i++){
-			inicia_jogadores(in, &vetor_de_usuarios[i]);
+			inicia_usuarios(in, &vetor_de_usuarios[i]);
 		}
 
-//--------------------------------------------------------------------------------------------------------------------------------------------
-		exe(in, out, vetor_de_usuarios, numero_de_usuarios);
-//--------------------------------------------------------------------------------------------------------------------------------------------
+		//Essa função analisa quais são as próximas ações à serem executadas
+		exe(in, out, principal, vetor_de_usuarios, numero_de_usuarios);
 
 
 		//Fecha o fluxo de entrada e saída de dados
@@ -42,9 +42,21 @@ int main(){
 			free(vetor_de_usuarios[i].nome);
 			delete_timeline(vetor_de_usuarios[i].timeline);
 		}
+		t_nodo *w_nodo = principal->first;
+		while(w_nodo != NULL){
+			free(w_nodo->msg);
+			w_nodo = w_nodo->next;
+		}
+		delete_timeline(principal);
 		free(vetor_de_usuarios);
 
-	}while(fopen(in_file_name, "r"));
+		FILE *teste = fopen(in_file_name, "r");
+		if(teste == NULL){
+			return 0;
+		}
+		fclose(teste);
+
+	}while(1);
 
 	return 0;
 }
